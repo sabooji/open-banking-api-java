@@ -1,10 +1,12 @@
 package uk.co.syntaxa.openbanking.api;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -18,15 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyStore;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class OpenBankingDirectoryVersion2_0 {
 
+    //TODO: Some form of caching so that the list is refreshed every x (configurable) period
     /*
     signing key id = nWNjoBVmFEhkEI-YPmgOXlTniTU
     transport key id = Yv55skqRe4haWnTA7NF2fjxrexM
@@ -45,6 +49,68 @@ public class OpenBankingDirectoryVersion2_0 {
 
     public void getAspsps() {
 
+        AuthenticationResult authenticationResult = this.authenticate();
+
+        GetAuthorisationServersResult authServers = this.getAuthorisationServers(authenticationResult);
+    }
+
+    private GetAuthorisationServersResult getAuthorisationServers(final AuthenticationResult authenticationResult) {
+
+        CloseableHttpClient httpClient = ApiClientUtils.get();
+
+        try {
+            HttpGet httpGet = new HttpGet("https://matls-api.openbankingtest.org.uk/scim/v2/OBAccountPaymentServiceProviders/"
+                    + "?filter="+urlEncode("(AuthorisationServers pr)"));
+
+            httpGet.setHeader("Authorization", "Bearer " + authenticationResult.getAccessToken());
+
+            System.out.println("Executing request " + httpGet.getURI().toASCIIString());
+
+//            // Create a custom response handler
+//            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+//
+//                @Override
+//                public String handleResponse(
+//                        final HttpResponse response) throws ClientProtocolException, IOException {
+//                    int status = response.getStatusLine().getStatusCode();
+//                    if (status >= 200 && status < 300) {
+//                        HttpEntity entity = response.getEntity();
+//                        return entity != null ? EntityUtils.toString(entity) : null;
+//                    } else {
+//                        throw new ClientProtocolException("Unexpected response status: " + status);
+//                    }
+//                }
+//
+//            };
+//
+            CloseableHttpResponse response = (CloseableHttpResponse) httpClient.execute(httpGet);
+            try {
+                HttpEntity entity = response.getEntity();
+
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                System.out.println(EntityUtils.toString(entity, "UTF-8"));
+                EntityUtils.consumeQuietly(entity);
+
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private AuthenticationResult authenticate() {
         CloseableHttpClient httpClient = ApiClientUtils.get();
 
         try {
@@ -83,8 +149,15 @@ public class OpenBankingDirectoryVersion2_0 {
 
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());
-                System.out.println(EntityUtils.toString(entity, "UTF-8"));
+
+                String responseBody = EntityUtils.toString(entity, "UTF-8");
+                System.out.println(responseBody);
                 EntityUtils.consumeQuietly(entity);
+
+                ObjectMapper mapper = new ObjectMapper();
+                AuthenticationResult authenticationResult = mapper.readValue(responseBody, AuthenticationResult.class);
+
+                return authenticationResult;
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -166,5 +239,11 @@ public class OpenBankingDirectoryVersion2_0 {
         claimset.setExpirationTimeMinutesInTheFuture(60); // TODO: should be configurable when creating the SDK context
 
         return claimset;
+    }
+
+    public static void main(String[] args) {
+
+
+        new OpenBankingDirectoryVersion2_0().getAspsps();
     }
 }

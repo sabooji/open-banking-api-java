@@ -21,7 +21,7 @@ public class ApiClientUtils {
         SSLContext sslcontext = null;
         try {
             sslcontext = SSLContexts.custom()
-                    .loadTrustMaterial(OpenBankingDirectoryVersion2_0.getKeyStore("certs/ob_test_truststore.jks", "password"), new TrustStrategy() {
+                    .loadTrustMaterial(OpenBankingDirectoryVersion2_0.getKeyStore("ob_test_truststore.jks", "password"), new TrustStrategy() {
                         public boolean isTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
                             return false;
                         }
@@ -30,7 +30,7 @@ public class ApiClientUtils {
                             "password1".toCharArray()
                             ,
                             (PrivateKeyStrategy) (map, socket) -> {
-                                map.entrySet().forEach(System.out::println);
+                                map.keySet().forEach(System.out::println);
                                 return "Yv55skqRe4haWnTA7NF2fjxrexM".toLowerCase(); //TODO: go from config
                             }
                             )
