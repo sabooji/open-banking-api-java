@@ -4,11 +4,24 @@
     <groupId>uk.co.syntaxa</groupId>
     <artifactId>open-banking-api-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <java.version>1.8</java.version>
         <lombok.version>1.16.16</lombok.version>
-        <httpClient.version>1.16.16</httpClient.version>
+        <httpClient.version>4.5.6</httpClient.version>
+        <jose4j.version>0.6.4</jose4j.version>
     </properties>
 
     <dependencyManagement>
@@ -23,6 +36,11 @@
                 <artifactId>httpclient</artifactId>
                 <version>${httpClient.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>${jose4j.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -33,6 +51,10 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
         </dependency>
     </dependencies>
 </project>
