@@ -1,6 +1,5 @@
 package uk.co.syntaxa.openbanking.api;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -47,7 +46,7 @@ public class OpenBankingDirectoryVersion2_0 {
         }
     }
 
-    public void getAspsps() {
+    public void getAspspList() {
 
         AuthenticationResult authenticationResult = this.authenticate();
 
@@ -244,6 +243,6 @@ public class OpenBankingDirectoryVersion2_0 {
     public static void main(String[] args) {
 
 
-        new OpenBankingDirectoryVersion2_0().getAspsps();
+        new OpenBankingDirectoryVersion2_0().getAspspList();
     }
 }
