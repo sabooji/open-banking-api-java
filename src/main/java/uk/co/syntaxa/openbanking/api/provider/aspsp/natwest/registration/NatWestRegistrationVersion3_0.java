@@ -1,4 +1,4 @@
-package uk.co.syntaxa.openbanking.api.provider.natwest.registration;
+package uk.co.syntaxa.openbanking.api.provider.aspsp.natwest.registration;
 
 public class NatWestRegistrationVersion3_0 {
 

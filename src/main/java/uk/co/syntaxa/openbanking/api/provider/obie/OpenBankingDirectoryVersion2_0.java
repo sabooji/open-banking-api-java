@@ -1,4 +1,4 @@
-package uk.co.syntaxa.openbanking.api;
+package uk.co.syntaxa.openbanking.api.provider.obie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -14,6 +14,9 @@ import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
+import uk.co.syntaxa.openbanking.api.ApiClientUtils;
+import uk.co.syntaxa.openbanking.api.provider.obie.model.AuthenticationResult;
+import uk.co.syntaxa.openbanking.api.provider.obie.model.GetOBAccountPaymentServiceProvidersResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,10 +34,10 @@ public class OpenBankingDirectoryVersion2_0 {
 
     //TODO: Some form of caching so that the list is refreshed every x (configurable) period
     /*
-    signing key id = nWNjoBVmFEhkEI-YPmgOXlTniTU
-    transport key id = Yv55skqRe4haWnTA7NF2fjxrexM
-    ssa id = 4tHCFYzhmRTp5ed7Tr5IN6
-     */
+        signing key id = nWNjoBVmFEhkEI-YPmgOXlTniTU
+        transport key id = Yv55skqRe4haWnTA7NF2fjxrexM
+        ssa id = 4tHCFYzhmRTp5ed7Tr5IN6
+    */
 
     private String urlEncode(String valueToEncode) {
         try {
@@ -50,10 +53,11 @@ public class OpenBankingDirectoryVersion2_0 {
 
         AuthenticationResult authenticationResult = this.authenticate();
 
-        GetAuthorisationServersResult authServers = this.getAuthorisationServers(authenticationResult);
+        GetOBAccountPaymentServiceProvidersResult authServers = this.getAuthorisationServers(authenticationResult);
+        System.out.println(authServers);
     }
 
-    private GetAuthorisationServersResult getAuthorisationServers(final AuthenticationResult authenticationResult) {
+    private GetOBAccountPaymentServiceProvidersResult getAuthorisationServers(final AuthenticationResult authenticationResult) {
 
         CloseableHttpClient httpClient = ApiClientUtils.get();
 
@@ -88,10 +92,14 @@ public class OpenBankingDirectoryVersion2_0 {
 
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());
-                System.out.println(EntityUtils.toString(entity, "UTF-8"));
+                String responseBody = EntityUtils.toString(entity, "UTF-8");
+                System.out.println(responseBody);
                 EntityUtils.consumeQuietly(entity);
 
-                return null;
+                ObjectMapper mapper = new ObjectMapper();
+                GetOBAccountPaymentServiceProvidersResult allAspspsWithAuthServers = mapper.readValue(responseBody, GetOBAccountPaymentServiceProvidersResult.class);
+
+                return allAspspsWithAuthServers;
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);

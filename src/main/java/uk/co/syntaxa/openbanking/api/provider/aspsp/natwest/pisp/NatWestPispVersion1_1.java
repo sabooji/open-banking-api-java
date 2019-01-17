@@ -1,4 +1,4 @@
-package uk.co.syntaxa.openbanking.api.provider.natwest.pisp;
+package uk.co.syntaxa.openbanking.api.provider.aspsp.natwest.pisp;
 
 public class NatWestPispVersion1_1 {
 

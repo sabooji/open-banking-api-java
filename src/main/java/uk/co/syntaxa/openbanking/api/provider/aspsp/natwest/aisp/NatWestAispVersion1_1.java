@@ -1,6 +1,6 @@
-package uk.co.syntaxa.openbanking.api.provider.natwest.aisp;
+package uk.co.syntaxa.openbanking.api.provider.aspsp.natwest.aisp;
 
-import uk.co.syntaxa.openbanking.api.provider.AispVersion1_1;
+import uk.co.syntaxa.openbanking.api.provider.aspsp.AispVersion1_1;
 import uk.co.syntaxa.openbanking.api.provider.exception.NotSupportedException;
 
 public class NatWestAispVersion1_1 implements AispVersion1_1 {

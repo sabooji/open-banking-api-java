@@ -1,4 +1,4 @@
-package uk.co.syntaxa.openbanking.api.provider.natwest.aisp;
+package uk.co.syntaxa.openbanking.api.provider.aspsp.natwest.aisp;
 
 public class NatWestAispVersion2_0 {
 

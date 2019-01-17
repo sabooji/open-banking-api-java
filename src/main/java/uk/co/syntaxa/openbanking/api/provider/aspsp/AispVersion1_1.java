@@ -1,4 +1,4 @@
-package uk.co.syntaxa.openbanking.api.provider;
+package uk.co.syntaxa.openbanking.api.provider.aspsp;
 
 import uk.co.syntaxa.openbanking.api.provider.exception.NotSupportedException;
 
