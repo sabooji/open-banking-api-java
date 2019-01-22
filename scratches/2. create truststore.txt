@@ -1,0 +1,104 @@
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ openssl x509 -outform der -in root.pem -out ob_root_ca.der
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_root -keystore ob_test_truststore.jks -file ob_root_ca.der
+Enter keystore password:  password
+Re-enter new password: password
+Owner: CN=OpenBanking Pre-Production Root CA, O=OpenBanking, C=GB
+Issuer: CN=OpenBanking Pre-Production Root CA, O=OpenBanking, C=GB
+Serial number: 59c4fcf6
+Valid from: Fri Sep 22 12:39:42 BST 2017 until: Tue Sep 22 13:09:42 BST 2037
+Certificate fingerprints:
+         MD5:  38:BC:2F:F0:7F:34:A0:E0:42:DB:65:81:51:F8:6C:D7
+         SHA1: 3C:97:AD:3F:63:9B:21:EF:00:F3:39:93:90:61:6C:8A:7D:0D:5F:03
+         SHA256: 73:24:4E:0D:1F:5B:01:C5:F6:E5:A1:A0:2A:18:AC:67:10:01:4F:2C:AF:A3:0A:53:52:87:FE:37:A3:70:74:2F
+         Signature algorithm name: SHA256withRSA
+         Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen:2147483647
+]
+
+#2: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  Key_CertSign
+  Crl_Sign
+]
+
+#3: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: EC 38 8E 0B DA F3 F9 37   3E 90 DE 7D 5F 6A E6 60  .8.....7>..._j.`
+0010: CD 79 42 83                                        .yB.
+]
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$
+
+
+
+
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ openssl x509 -outform der -in
+certSigning.pem          config.json              ob_root_ca.der           privateKeySigning.key    root.pem
+certTransport.pem        issuingca.pem            ob_test_truststore.jks   privateKeyTransport.key  signingca.pem
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ openssl x509 -outform der -in issuingca.pem -out ob_test_issuing_ca.der
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_root -keystore ob_test_truststore.jks -file ob_
+ob_root_ca.der          ob_test_issuing_ca.der  ob_test_truststore.jks
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_issuing -keystore ob_test_truststore.jks -file ob_test_issuing_ca.der
+Enter keystore password:  password
+Certificate was added to keystore
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$
+
+
+
+
+
+
+
+
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ openssl x509 -outform der -in issuingca.pem -out ob_test_issuing_ca.der
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_root -keystore ob_test_truststore.jks -file ob_
+ob_root_ca.der          ob_test_issuing_ca.der  ob_test_truststore.jks
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_issuing -keystore ob_test_truststore.jks -file ob_test_issuing_ca.der
+Enter keystore password:  password
+Certificate was added to keystore
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ openssl x509 -outform der -in signingca.pem -out ob_test_signing.der
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$ keytool -import -alias ob_test_signing -keystore ob_test_truststore.jks -file ob_test_signing.der
+Enter keystore password:  password
+Certificate was added to keystore
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/obdatat/config (env-sandbox)
+$
+
+
+
+

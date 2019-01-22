@@ -1,0 +1,97 @@
+** REMEMBER TO CHAIN THEM ALL!!!! **
+
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ ls -la
+total 28
+drwxr-xr-x 1 saboo 197121    0 Jan 15 18:52 .
+drwxr-xr-x 1 saboo 197121    0 Jan 15 18:38 ..
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.csr
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.key
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.csr
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.key
+-rw-r--r-- 1 saboo 197121    0 Jan 15 22:22 Yv55skqRe4haWnTA7NF2fjxrexM.pem
+-rw-r--r-- 1 saboo 197121 1854 Jan 15 18:52 nWNjoBVmFEhkEI-YPmgOXlTniTU.pem
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ openssl pkcs12 -export -out 4tHCFYzhmRTp5ed7Tr5IN6_signing.pfx -inkey 4tHCFYzhmRTp5ed7Tr5IN6_signing.key -in  nWNjoBVmFEhkEI-YPmgOXlTniTU.pem
+Enter Export Password:
+Verifying - Enter Export Password:
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ keytool -list -keystore 4tHCFYzhmRTp5ed7Tr5IN6_signing.pfx
+Enter keystore password:
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+1, 15-Jan-2019, PrivateKeyEntry,
+Certificate fingerprint (SHA1): DB:54:A8:BC:ED:23:65:62:1B:38:56:90:49:E6:B4:F0:1E:A2:52:8A
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ keytool -importkeystore -srckeystore 4tHCFYzhmRTp5ed7Tr5IN6_signing.pfx -srcstoretype pkcs12 -destkeystore 4tHCFYzhmRTp5ed7Tr5IN6_signing.jks -deststoretype JKS -srcalias 1 -destalias nWNjoBVmFEhkEI-YPmgOXlTniTU
+Enter destination keystore password:
+Re-enter new password:
+Enter source keystore password:
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ ls -la
+total 36
+drwxr-xr-x 1 saboo 197121    0 Jan 15 22:26 .
+drwxr-xr-x 1 saboo 197121    0 Jan 15 18:38 ..
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.csr
+-rw-r--r-- 1 saboo 197121 2703 Jan 15 22:26 4tHCFYzhmRTp5ed7Tr5IN6_signing.jks
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.key
+-rw-r--r-- 1 saboo 197121 2933 Jan 15 22:24 4tHCFYzhmRTp5ed7Tr5IN6_signing.pfx
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.csr
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.key
+-rw-r--r-- 1 saboo 197121    0 Jan 15 22:22 Yv55skqRe4haWnTA7NF2fjxrexM.pem
+-rw-r--r-- 1 saboo 197121 1854 Jan 15 18:52 nWNjoBVmFEhkEI-YPmgOXlTniTU.pem
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$
+
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ openssl pkcs12 -export -out 4tHCFYzhmRTp5ed7Tr5IN6_transport.pfx -inkey 4tHCFYzhmRTp5ed7Tr5IN6_transport.key -in Yv55skqRe4haWnTA7NF2fjxrexM.pem
+Enter Export Password:
+Verifying - Enter Export Password:
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ keytool -list -keystore 4tHCFYzhmRTp5ed7Tr5IN6_transport.pfx
+Enter keystore password:
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+1, 15-Jan-2019, PrivateKeyEntry,
+Certificate fingerprint (SHA1): 8C:76:51:BB:1A:E8:E5:25:59:02:DF:82:FA:FB:3B:2C:C5:BD:90:9F
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ keytool -importkeystore -srckeystore 4tHCFYzhmRTp5ed7Tr5IN6_transport.pfx -srcstoretype pkcs12 -destkeystore 4tHCFYzhmRTp5ed7Tr5IN6_transport.jks -deststoretype JKS -srcalias 1 -destalias Yv55skqRe4haWnTA7NF2fjxrexM
+Enter destination keystore password:
+Re-enter new password:
+Enter source keystore password:
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$ ls -la
+total 48
+drwxr-xr-x 1 saboo 197121    0 Jan 15 22:30 .
+drwxr-xr-x 1 saboo 197121    0 Jan 15 18:38 ..
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.csr
+-rw-r--r-- 1 saboo 197121 2703 Jan 15 22:26 4tHCFYzhmRTp5ed7Tr5IN6_signing.jks
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_signing.key
+-rw-r--r-- 1 saboo 197121 2933 Jan 15 22:24 4tHCFYzhmRTp5ed7Tr5IN6_signing.pfx
+-rw-r--r-- 1 saboo 197121  997 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.csr
+-rw-r--r-- 1 saboo 197121 2714 Jan 15 22:30 4tHCFYzhmRTp5ed7Tr5IN6_transport.jks
+-rw-r--r-- 1 saboo 197121 1704 Dec 17 22:25 4tHCFYzhmRTp5ed7Tr5IN6_transport.key
+-rw-r--r-- 1 saboo 197121 2941 Jan 15 22:29 4tHCFYzhmRTp5ed7Tr5IN6_transport.pfx
+-rw-r--r-- 1 saboo 197121 1870 Jan 15 18:52 Yv55skqRe4haWnTA7NF2fjxrexM.pem
+-rw-r--r-- 1 saboo 197121 1854 Jan 15 18:52 nWNjoBVmFEhkEI-YPmgOXlTniTU.pem
+
+saboo@saboo-pc MINGW64 /c/dev/code/syntaxa/open-banking-api-java/src/main/resources/certs (feature/bootstrap-oidc-well-known)
+$

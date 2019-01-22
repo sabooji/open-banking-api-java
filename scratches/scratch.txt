@@ -1,0 +1,21 @@
+# Create a PFX from a private key and certificate pair
+```
+openssl pkcs12 -export -out </path/to/pfx>.pfx -inkey </path/to/privkey> -in </path/to/cert>
+```
+
+# Add a PFX to a JKS
+## Get the <src_alias>
+```
+keytool -list -keystore </path/to/pfx>.pfx
+```
+
+## Add to a JKS
+```
+keytool -importkeystore -srckeystore </path/to/pfx>.pfx -srcstoretype pkcs12 -destkeystore </path/to/jks>.jks -deststoretype JKS -srcalias <src_alias> -destalias <key_id>
+```
+
+# Add a PEM to a JKS (used when constructing trust stores)
+```
+openssl x509 -outform der -in </path/to/pem>.pem -out </path/to/certificate>.der
+keytool -import -alias <meaningful_name> -keystore </path/to/keystore>.jks -file </path/to/certificate>.der
+```
