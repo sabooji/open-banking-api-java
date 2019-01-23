@@ -12,4 +12,3 @@ A Java SDK for TPPs and the developer community to integrate with UK ASPSPs (ban
 ## Sponsors
 
 * [Syntaxa Ltd](https://syntaxa.co.uk)
-* [Royal Bank of Scotland Group Plc](https://developer.rbs.co.uk/apiportal)
