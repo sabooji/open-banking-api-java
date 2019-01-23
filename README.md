@@ -1,6 +1,6 @@
 # Open Banking (UK) API SDK
 
-A Java SDK for TPPs and the develop community to integrate with UK ASPSPs (banks and other implementers of the UK Open Banking standards).
+A Java SDK for TPPs and the developer community to integrate with UK ASPSPs (banks and other implementers of the UK Open Banking API standards).
 
 The aim of this project is to create an SDK that abstracts away both the variations and complexities of each API implementation behind a consistent interface.
 
