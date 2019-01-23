@@ -1,6 +1,10 @@
-# Java SDK for the Open Banking (UK) APIs
+# Open Banking (UK) API SDK
 
 A Java SDK for TPPs and the develop community to integrate with UK ASPSPs (banks and other implementers of the UK Open Banking standards).
+
+The aim of this project is to create an SDK that abstracts away both the variations and complexities of each API implementation behind a consistent interface.
+
+It supports both a synchronous (blocking) and asynchornous (non-blocking) implementation.
 
 ## Links
 
@@ -12,4 +16,3 @@ A Java SDK for TPPs and the develop community to integrate with UK ASPSPs (banks
 ## Sponsors
 
 * [Syntaxa Ltd](https://syntaxa.co.uk)
-* [Royal Bank of Scotland Group Plc](https://developer.rbs.co.uk/apiportal)
