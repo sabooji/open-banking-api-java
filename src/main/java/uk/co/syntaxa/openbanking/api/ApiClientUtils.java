@@ -22,12 +22,12 @@ public class ApiClientUtils {
         SSLContext sslcontext = null;
         try {
             sslcontext = SSLContexts.custom()
-                    .loadTrustMaterial(OpenBankingDirectoryVersion2_0.getKeyStore("ob_test_truststore.jks", "password"), new TrustStrategy() {
+                    .loadTrustMaterial(KeyUtils.getKeyStore("ob_test_truststore.jks", "password"), new TrustStrategy() {
                         public boolean isTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
                             return false;
                         }
                     })
-                    .loadKeyMaterial(OpenBankingDirectoryVersion2_0.getKeyStore("certs/4tHCFYzhmRTp5ed7Tr5IN6_transport.jks", "password1"),
+                    .loadKeyMaterial(KeyUtils.getKeyStore("certs/4tHCFYzhmRTp5ed7Tr5IN6_transport.jks", "password1"),
                             "password1".toCharArray()
                             ,
                             (PrivateKeyStrategy) (map, socket) -> {

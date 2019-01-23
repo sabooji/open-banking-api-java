@@ -15,6 +15,7 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
 import uk.co.syntaxa.openbanking.api.ApiClientUtils;
+import uk.co.syntaxa.openbanking.api.KeyUtils;
 import uk.co.syntaxa.openbanking.api.sandbox.provider.obie.model.AuthenticationResult;
 import uk.co.syntaxa.openbanking.api.sandbox.provider.obie.model.GetOBAccountPaymentServiceProvidersResult;
 
@@ -135,7 +136,7 @@ public class OpenBankingDirectoryVersion2_0 {
             params.add(new BasicNameValuePair("client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"));
             params.add(new BasicNameValuePair("grant_type", "client_credentials"));
             params.add(new BasicNameValuePair("client_id", "4tHCFYzhmRTp5ed7Tr5IN6"));
-            params.add(new BasicNameValuePair("client_assertion",  this.getOBAuthenticationJWT()));
+            params.add(new BasicNameValuePair("client_assertion",  this.getAuthenticationJwt()));
             params.add(new BasicNameValuePair("scope", "ASPSPReadAccess TPPReadAccess AuthoritiesReadAccess"));
             httpPost.setEntity(new UrlEncodedFormEntity(params));
 
@@ -190,60 +191,14 @@ public class OpenBankingDirectoryVersion2_0 {
         }
     }
 
+    private String getAuthenticationJwt() {
+        Key signingKey = KeyUtils.getPrivateKey("certs/4tHCFYzhmRTp5ed7Tr5IN6_signing.jks", "password1", "nWNjoBVmFEhkEI-YPmgOXlTniTU", "password1");
+
+        return KeyUtils.getSignedJWT(this.getAuthenticationClaimset(), signingKey, "nWNjoBVmFEhkEI-YPmgOXlTniTU");
+    }
+
     private AuthenticationResult authenticate() {
         return this.authenticate(true);
-    }
-
-    public static KeyStore getKeyStore(final String path, final String password) {
-        try {
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-            keyStore.load(is, password.toCharArray());
-
-            return keyStore;
-
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Key getSigningPrivateKey() {
-
-        try {
-            KeyStore keyStore = getKeyStore("certs/4tHCFYzhmRTp5ed7Tr5IN6_signing.jks", "password1");
-
-            Certificate signingCert = keyStore.getCertificate("nWNjoBVmFEhkEI-YPmgOXlTniTU");
-            Key signingKey = keyStore.getKey("nWNjoBVmFEhkEI-YPmgOXlTniTU", "password1".toCharArray());
-
-            return signingKey;
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String getOBAuthenticationJWT() {
-
-        try {
-            final JwtClaims claimset = this.getAuthenticationClaimset();
-
-            JsonWebSignature jws = new JsonWebSignature();
-
-            jws.setPayload(claimset.toJson());
-            jws.setKey(this.getSigningPrivateKey());
-            jws.setKeyIdHeaderValue("nWNjoBVmFEhkEI-YPmgOXlTniTU");
-            jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
-
-            String jwt = jws.getCompactSerialization();
-
-            System.out.println(jwt);
-
-            return jwt;
-        } catch (JoseException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
     }
 
     private JwtClaims getAuthenticationClaimset() {

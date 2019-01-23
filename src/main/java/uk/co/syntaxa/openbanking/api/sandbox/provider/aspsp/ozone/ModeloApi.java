@@ -14,7 +14,7 @@ public class ModeloApi {
 
         OBAccountPaymentServiceProvider provider = result.getResources().get(0);
 
-        String configUrl = provider.getAuthorisationServes();
+//        String configUrl = provider.getAuthorisationServes();
 
 
     }
