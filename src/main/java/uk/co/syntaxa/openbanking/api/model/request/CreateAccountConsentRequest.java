@@ -1,21 +1,22 @@
 package uk.co.syntaxa.openbanking.api.model.request;
 
-import lombok.*;
-import uk.co.syntaxa.openbanking.api.model.aisp.Permission;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import uk.co.syntaxa.openbanking.api.model.aisp.AccountConsent;
+import uk.co.syntaxa.openbanking.api.model.request.parameters.CreateAccountConsentParameters;
+import uk.co.syntaxa.openbanking.api.provider.model.ProviderContext;
 
 @Builder
 @Getter
-@ToString
-@EqualsAndHashCode
-public class CreateAccountConsentRequest {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class CreateAccountConsentRequest extends ApiRequest<CreateAccountConsentParameters, AccountConsent> {
 
-    @Singular
-    private List<Permission> permissions;
+    //TODO: Migrate to SuperBuilder once IDE support and shift to superclass
+    private ProviderContext context;
 
-    private LocalDateTime whenExpires;
-    private LocalDateTime whenTransactionsFrom;
-    private LocalDateTime whenTransactionsTo;
+    //TODO: Migrate to SuperBuilder once IDE support and shift to superclass
+    private CreateAccountConsentParameters requestParameters;
 }

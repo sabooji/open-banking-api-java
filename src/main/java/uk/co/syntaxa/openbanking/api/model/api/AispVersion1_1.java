@@ -1,27 +1,27 @@
 package uk.co.syntaxa.openbanking.api.model.api;
 
 import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
-import uk.co.syntaxa.openbanking.api.model.request.*;
+import uk.co.syntaxa.openbanking.api.model.request.parameters.*;
 import uk.co.syntaxa.openbanking.api.model.response.CreateAccountConsentResponse;
 
 public interface AispVersion1_1 {
 
     CreateAccountConsentResponse createConsent(CreateAccountConsentRequest request);
-    GetAccountConsentRequest getConsent() throws NotSupportedException;
-    DeleteAccountConsentRequest revokeConsent();
+    GetAccountConsentParameters getConsent() throws NotSupportedException;
+    DeleteAccountConsentParameters revokeConsent();
 
-    GetAccountsRequest getAccounts();
+    GetAccountsParameters getAccounts();
 
-    GetBalancesRequest getBalancesForAccount();
-    GetBeneficiariesForAccountRequest getBeneficiariesForAccount();
-    GetDirectDebitsForAccountRequest getDirectDebitsForAccount();
-    GetProductInfoForAccountRequest getProductsForAccount();
-    GetStandingOrdersForAccountRequest getStandingOrdersForAccount();
-    GetTransactionsForAccountRequest getTransactionsForAccount();
+    GetBalancesParameters getBalancesForAccount();
+    GetBeneficiariesForAccountParameters getBeneficiariesForAccount();
+    GetDirectDebitsForAccountParameters getDirectDebitsForAccount();
+    GetProductInfoForAccountParameters getProductsForAccount();
+    GetStandingOrdersForAccountParameters getStandingOrdersForAccount();
+    GetTransactionsForAccountParameters getTransactionsForAccount();
 
-    GetBeneficiariesRequest getBeneficiaries() throws NotSupportedException;
-    GetDirectDebitsRequest getDirectDebits() throws NotSupportedException;
-    GetProductInfoRequest getProducts() throws NotSupportedException;
-    GetStandingOrdersRequest getStandingOrders() throws NotSupportedException;
-    GetTransactionsRequest getTransactions() throws NotSupportedException;
+    GetBeneficiariesParameters getBeneficiaries() throws NotSupportedException;
+    GetDirectDebitsParameters getDirectDebits() throws NotSupportedException;
+    GetProductInfoParameters getProducts() throws NotSupportedException;
+    GetStandingOrdersParameters getStandingOrders() throws NotSupportedException;
+    GetTransactionsParameters getTransactions() throws NotSupportedException;
 }

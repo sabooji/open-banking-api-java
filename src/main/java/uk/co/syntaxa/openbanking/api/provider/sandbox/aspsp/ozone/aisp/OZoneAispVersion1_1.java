@@ -5,7 +5,7 @@ import uk.co.syntaxa.openbanking.api.model.ValidationResult;
 import uk.co.syntaxa.openbanking.api.model.api.AispVersion1_1;
 import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
 import uk.co.syntaxa.openbanking.api.model.exception.ValidationException;
-import uk.co.syntaxa.openbanking.api.model.request.*;
+import uk.co.syntaxa.openbanking.api.model.request.parameters.*;
 import uk.co.syntaxa.openbanking.api.model.response.CreateAccountConsentResponse;
 import uk.co.syntaxa.openbanking.api.provider.model.ProviderContext;
 
@@ -32,85 +32,85 @@ public class OZoneAispVersion1_1 implements AispVersion1_1 {
     }
 
     @Override
-    public GetAccountConsentRequest getConsent() throws NotSupportedException {
+    public GetAccountConsentParameters getConsent() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public DeleteAccountConsentRequest revokeConsent() {
+    public DeleteAccountConsentParameters revokeConsent() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetAccountsRequest getAccounts() {
+    public GetAccountsParameters getAccounts() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetBalancesRequest getBalancesForAccount() {
+    public GetBalancesParameters getBalancesForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetBeneficiariesForAccountRequest getBeneficiariesForAccount() {
+    public GetBeneficiariesForAccountParameters getBeneficiariesForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetDirectDebitsForAccountRequest getDirectDebitsForAccount() {
+    public GetDirectDebitsForAccountParameters getDirectDebitsForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetProductInfoForAccountRequest getProductsForAccount() {
+    public GetProductInfoForAccountParameters getProductsForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetStandingOrdersForAccountRequest getStandingOrdersForAccount() {
+    public GetStandingOrdersForAccountParameters getStandingOrdersForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetTransactionsForAccountRequest getTransactionsForAccount() {
+    public GetTransactionsForAccountParameters getTransactionsForAccount() {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetBeneficiariesRequest getBeneficiaries() throws NotSupportedException {
+    public GetBeneficiariesParameters getBeneficiaries() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetDirectDebitsRequest getDirectDebits() throws NotSupportedException {
+    public GetDirectDebitsParameters getDirectDebits() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetProductInfoRequest getProducts() throws NotSupportedException {
+    public GetProductInfoParameters getProducts() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetStandingOrdersRequest getStandingOrders() throws NotSupportedException {
+    public GetStandingOrdersParameters getStandingOrders() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
 
     @Override
-    public GetTransactionsRequest getTransactions() throws NotSupportedException {
+    public GetTransactionsParameters getTransactions() throws NotSupportedException {
         // TODO: Implement
         throw new NotSupportedException();
     }
