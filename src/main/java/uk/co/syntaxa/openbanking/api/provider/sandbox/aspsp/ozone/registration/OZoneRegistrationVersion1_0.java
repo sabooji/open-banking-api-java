@@ -9,8 +9,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
-import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
-import uk.co.syntaxa.openbanking.api.provider.sandbox.api.RegistrationVersion_1_0;
 import uk.co.syntaxa.openbanking.api.utils.ApiClientUtils;
 import uk.co.syntaxa.openbanking.api.utils.KeyUtils;
 
@@ -19,7 +17,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class OZoneRegistrationVersion1_0 implements RegistrationVersion_1_0 {
+public class OZoneRegistrationVersion1_0 {
 
     private static final String VERSION = "1.0";
 
@@ -54,7 +52,6 @@ public class OZoneRegistrationVersion1_0 implements RegistrationVersion_1_0 {
             "GhurC2lU8fDIDQ5-IHMkccAMux6U-0Ln51Hfu36OdpZRir7guRpr37mo8NP7nfOeN3Pm6oTQUGLHMgxTVoXuExLkfC9ra24IiBWTFMPG" +
             "_C8sjLfNuM4Q";
 
-    @Override
     public String createRegistration() {
 
         CloseableHttpClient httpClient = ApiClientUtils.getHttpClient();
@@ -152,21 +149,6 @@ public class OZoneRegistrationVersion1_0 implements RegistrationVersion_1_0 {
         claimset.setClaim("scope", "openid accounts payments");
 
         return claimset;
-    }
-
-    @Override
-    public void getRegistration(String clientId) throws NotSupportedException {
-
-    }
-
-    @Override
-    public void updateRegistration(String clientId) throws NotSupportedException {
-
-    }
-
-    @Override
-    public void deleteRegistration(String clientId) throws NotSupportedException {
-
     }
 
     public static void main(String[] a) {

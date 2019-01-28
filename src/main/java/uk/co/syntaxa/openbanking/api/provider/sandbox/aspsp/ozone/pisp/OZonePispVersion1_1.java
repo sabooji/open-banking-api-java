@@ -1,7 +1,7 @@
 package uk.co.syntaxa.openbanking.api.provider.sandbox.aspsp.ozone.pisp;
 
 import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
-import uk.co.syntaxa.openbanking.api.provider.sandbox.api.PispVersion1_1;
+import uk.co.syntaxa.openbanking.api.model.api.PispVersion1_1;
 
 public class OZonePispVersion1_1 implements PispVersion1_1 {
 
