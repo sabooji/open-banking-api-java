@@ -24,6 +24,7 @@
         <jose4j.version>0.6.4</jose4j.version>
         <jackson.version>2.9.8</jackson.version>
         <okhttp.version>3.12.1</okhttp.version>
+        <apacheCommons.version>4.2</apacheCommons.version>
     </properties>
 
     <dependencyManagement>
@@ -53,6 +54,12 @@
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${apacheCommons.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -76,6 +83,10 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
