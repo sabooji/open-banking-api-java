@@ -9,6 +9,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
+import uk.co.syntaxa.openbanking.api.model.api.RegistrationVersion_1_0;
+import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
+import uk.co.syntaxa.openbanking.api.model.request.CreateRegistrationRequest;
+import uk.co.syntaxa.openbanking.api.model.request.DeleteRegistrationRequest;
+import uk.co.syntaxa.openbanking.api.model.request.GetRegistrationRequest;
+import uk.co.syntaxa.openbanking.api.model.request.UpdateeRegistrationRequest;
+import uk.co.syntaxa.openbanking.api.model.response.CreateRegistrationResponse;
+import uk.co.syntaxa.openbanking.api.model.response.DeleteRegistrationResponse;
+import uk.co.syntaxa.openbanking.api.model.response.GetRegistrationResponse;
+import uk.co.syntaxa.openbanking.api.model.response.UpdateRegistrationResponse;
+import uk.co.syntaxa.openbanking.api.provider.model.ProviderContext;
 import uk.co.syntaxa.openbanking.api.utils.ApiClientUtils;
 import uk.co.syntaxa.openbanking.api.utils.KeyUtils;
 
@@ -16,43 +27,20 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.*;
 
-public class OZoneRegistrationVersion1_0 {
+public class OZoneRegistrationVersion1_0 implements RegistrationVersion_1_0 {
 
     private static final String VERSION = "1.0";
 
     private static String AS_AUD = "https://modelobankauth2018.o3bank.co.uk:4101";
 
-    private static String SSA = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlFON3p1VlphTEtnZTdjQV9LVjRSMU95cXd5YyIsInR5cCI6IkpXVCJ9" +
-            ".eyJpc3MiOiJPcGVuQmFua2luZyBMdGQiLCJpYXQiOjE1NDgyODI1NzIzMTAsImp0aSI6IjQ5NzRiODVmZGZjMTQ0ZDgiLCJzb2Z0d2F" +
-            "yZV9lbnZpcm9ubWVudCI6InByZHRzdCIsInNvZnR3YXJlX21vZGUiOiJMaXZlIiwic29mdHdhcmVfaWQiOiI0dEhDRll6aG1SVHA1ZWQ" +
-            "3VHI1SU42Iiwic29mdHdhcmVfY2xpZW50X2lkIjoiNHRIQ0ZZemhtUlRwNWVkN1RyNUlONiIsInNvZnR3YXJlX2NsaWVudF9uYW1lIjo" +
-            "iU3ludGF4YSBQbGF5cGVuIiwic29mdHdhcmVfY2xpZW50X2Rlc2NyaXB0aW9uIjoiQW4gU1NBIHRvIHByb3ZpZGUgU3ludGF4YSBhY2N" +
-            "lc3MgdG8gdGhlIFNhbmRib3ggZWNvLXN5c3RlbS4iLCJzb2Z0d2FyZV92ZXJzaW9uIjowLjEsInNvZnR3YXJlX2NsaWVudF91cmkiOiJ" +
-            "odHRwczovL3N5bnRheGEuY28udWsiLCJzb2Z0d2FyZV9yZWRpcmVjdF91cmlzIjpbImh0dHBzOi8vcmVkaXJlY3Quc3ludGF4YS5jby5" +
-            "1ay9yZWRpcmVjdCJdLCJzb2Z0d2FyZV9yb2xlcyI6WyJBSVNQIiwiUElTUCJdLCJvcmdhbmlzYXRpb25fY29tcGV0ZW50X2F1dGhvcml" +
-            "0eV9jbGFpbXMiOnsiYXV0aG9yaXR5X2lkIjoiRkNBR0JSIiwicmVnaXN0cmF0aW9uX2lkIjoiVW5rbm93bjAwMTU4MDAwMDFaRVozV0F" +
-            "BWCIsInN0YXR1cyI6IkFjdGl2ZSIsImF1dGhvcmlzYXRpb25zIjpbeyJtZW1iZXJfc3RhdGUiOiJHQiIsInJvbGVzIjpbIkFJU1AiLCJ" +
-            "QSVNQIl19LHsibWVtYmVyX3N0YXRlIjoiSUUiLCJyb2xlcyI6WyJBSVNQIiwiUElTUCJdfSx7Im1lbWJlcl9zdGF0ZSI6Ik5MIiwicm9" +
-            "sZXMiOlsiQUlTUCIsIlBJU1AiXX1dfSwic29mdHdhcmVfbG9nb191cmkiOiJodHRwczovL3N5bnRheGEuY28udWsvaW1hZ2VzL2xvZ28" +
-            "ucG5nIiwib3JnX3N0YXR1cyI6IkFjdGl2ZSIsIm9yZ19pZCI6IjAwMTU4MDAwMDFaRVozV0FBWCIsIm9yZ19uYW1lIjoiU3ludGF4YSB" +
-            "MaW1pdGVkIiwib3JnX2NvbnRhY3RzIjpbeyJuYW1lIjoiQnVzaW5lc3MiLCJlbWFpbCI6Im9wZW5iYW5raW5nQHN5bnRheGEuY28udWs" +
-            "iLCJwaG9uZSI6Iis0NCA3ODE1IDYyMSAwNTkiLCJ0eXBlIjoiQnVzaW5lc3MifSx7Im5hbWUiOiJUZWNobmljYWwiLCJlbWFpbCI6Im9" +
-            "wZW5iYW5raW5nQHN5bnRheGEuY28udWsiLCJwaG9uZSI6Iis0NCA3ODE1IDYyMSAwNTkiLCJ0eXBlIjoiVGVjaG5pY2FsIn1dLCJvcmd" +
-            "fandrc19lbmRwb2ludCI6Imh0dHBzOi8va2V5c3RvcmUub3BlbmJhbmtpbmd0ZXN0Lm9yZy51ay8wMDE1ODAwMDAxWkVaM1dBQVgvMDA" +
-            "xNTgwMDAwMVpFWjNXQUFYLmp3a3MiLCJvcmdfandrc19yZXZva2VkX2VuZHBvaW50IjoiaHR0cHM6Ly9rZXlzdG9yZS5vcGVuYmFua2l" +
-            "uZ3Rlc3Qub3JnLnVrLzAwMTU4MDAwMDFaRVozV0FBWC9yZXZva2VkLzAwMTU4MDAwMDFaRVozV0FBWC5qd2tzIiwic29mdHdhcmVfand" +
-            "rc19lbmRwb2ludCI6Imh0dHBzOi8va2V5c3RvcmUub3BlbmJhbmtpbmd0ZXN0Lm9yZy51ay8wMDE1ODAwMDAxWkVaM1dBQVgvNHRIQ0Z" +
-            "ZemhtUlRwNWVkN1RyNUlONi5qd2tzIiwic29mdHdhcmVfandrc19yZXZva2VkX2VuZHBvaW50IjoiaHR0cHM6Ly9rZXlzdG9yZS5vcGV" +
-            "uYmFua2luZ3Rlc3Qub3JnLnVrLzAwMTU4MDAwMDFaRVozV0FBWC9yZXZva2VkLzR0SENGWXpobVJUcDVlZDdUcjVJTjYuandrcyIsInN" +
-            "vZnR3YXJlX3BvbGljeV91cmkiOiJodHRwczovL3N5bnRheGEuY28udWsvcG9saWN5Iiwic29mdHdhcmVfdG9zX3VyaSI6Imh0dHBzOi8" +
-            "vc3ludGF4YS5jby51ay90ZXJtcy1vZi1zZXJ2aWNlIiwic29mdHdhcmVfb25fYmVoYWxmX29mX29yZyI6IiJ9.hGzqpWpvz7QAcxoddO" +
-            "aWJJSLpM3BoDce-dE8jrRUDMBpmdtroJE0ay_AaLWVqLoaHzN6jUYyjNFGuU_Ybtcf53GvnjmTo1CvqGsN5_6NBLPiw-abukMRnndAK-" +
-            "I7_drpNS3eCK08kK0AqgRrbpBS3eXLLHf3CVVSPaRNhuYiNZE8Y8AaTt4BR7-k03gvODPxxblIFQyeBCTCk8NidTJYPKLbkr3hr_oeGp" +
-            "GhurC2lU8fDIDQ5-IHMkccAMux6U-0Ln51Hfu36OdpZRir7guRpr37mo8NP7nfOeN3Pm6oTQUGLHMgxTVoXuExLkfC9ra24IiBWTFMPG" +
-            "_C8sjLfNuM4Q";
+    private static String SSA = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImRTM0hFenN5VkpPTHpRVkhJVWtPSkUySXFrbTN5SGI0QllfUGJCRVRXalk9IiwidHlwIjoiSldUIn0.eyJpc3MiOiJPcGVuQmFua2luZyBMdGQiLCJpYXQiOjE1NDkwNDM3MjAwMDksImp0aSI6IjM0YTc1MzM5YTg1MzQ1MzUiLCJzb2Z0d2FyZV9lbnZpcm9ubWVudCI6InNhbmRib3giLCJzb2Z0d2FyZV9tb2RlIjoiTGl2ZSIsInNvZnR3YXJlX2lkIjoiNHRIQ0ZZemhtUlRwNWVkN1RyNUlONiIsInNvZnR3YXJlX2NsaWVudF9pZCI6IjR0SENGWXpobVJUcDVlZDdUcjVJTjYiLCJzb2Z0d2FyZV9jbGllbnRfbmFtZSI6IlN5bnRheGEgUGxheXBlbiIsInNvZnR3YXJlX2NsaWVudF9kZXNjcmlwdGlvbiI6IkFuIFNTQSB0byBwcm92aWRlIFN5bnRheGEgYWNjZXNzIHRvIHRoZSBTYW5kYm94IGVjby1zeXN0ZW0uIiwic29mdHdhcmVfdmVyc2lvbiI6MC4xLCJzb2Z0d2FyZV9jbGllbnRfdXJpIjoiaHR0cHM6Ly9zeW50YXhhLmNvLnVrIiwic29mdHdhcmVfcmVkaXJlY3RfdXJpcyI6WyJodHRwczovL3JlZGlyZWN0LnN5bnRheGEuY28udWsvcmVkaXJlY3QiXSwic29mdHdhcmVfcm9sZXMiOlsiQUlTUCIsIlBJU1AiXSwib3JnYW5pc2F0aW9uX2NvbXBldGVudF9hdXRob3JpdHlfY2xhaW1zIjp7ImF1dGhvcml0eV9pZCI6IkZDQUdCUiIsInJlZ2lzdHJhdGlvbl9pZCI6IlVua25vd24wMDE1ODAwMDAxWkVaM1dBQVgiLCJzdGF0dXMiOiJBY3RpdmUiLCJhdXRob3Jpc2F0aW9ucyI6W3sibWVtYmVyX3N0YXRlIjoiR0IiLCJyb2xlcyI6WyJBSVNQIiwiUElTUCJdfSx7Im1lbWJlcl9zdGF0ZSI6IklFIiwicm9sZXMiOlsiQUlTUCIsIlBJU1AiXX0seyJtZW1iZXJfc3RhdGUiOiJOTCIsInJvbGVzIjpbIkFJU1AiLCJQSVNQIl19XX0sInNvZnR3YXJlX2xvZ29fdXJpIjoiaHR0cHM6Ly9zeW50YXhhLmNvLnVrL2ltYWdlcy9sb2dvLnBuZyIsIm9yZ19zdGF0dXMiOiJBY3RpdmUiLCJvcmdfaWQiOiIwMDE1ODAwMDAxWkVaM1dBQVgiLCJvcmdfbmFtZSI6IlN5bnRheGEgTGltaXRlZCIsIm9yZ19jb250YWN0cyI6W3sibmFtZSI6IkJ1c2luZXNzIiwiZW1haWwiOiJvcGVuYmFua2luZ0BzeW50YXhhLmNvLnVrIiwicGhvbmUiOiIrNDQgNzgxNSA2MjEgMDU5IiwidHlwZSI6IkJ1c2luZXNzIn0seyJuYW1lIjoiVGVjaG5pY2FsIiwiZW1haWwiOiJvcGVuYmFua2luZ0BzeW50YXhhLmNvLnVrIiwicGhvbmUiOiIrNDQgNzgxNSA2MjEgMDU5IiwidHlwZSI6IlRlY2huaWNhbCJ9XSwib3JnX2p3a3NfZW5kcG9pbnQiOiJodHRwczovL2tleXN0b3JlLm9wZW5iYW5raW5ndGVzdC5vcmcudWsvMDAxNTgwMDAwMVpFWjNXQUFYLzAwMTU4MDAwMDFaRVozV0FBWC5qd2tzIiwib3JnX2p3a3NfcmV2b2tlZF9lbmRwb2ludCI6Imh0dHBzOi8va2V5c3RvcmUub3BlbmJhbmtpbmd0ZXN0Lm9yZy51ay8wMDE1ODAwMDAxWkVaM1dBQVgvcmV2b2tlZC8wMDE1ODAwMDAxWkVaM1dBQVguandrcyIsInNvZnR3YXJlX2p3a3NfZW5kcG9pbnQiOiJodHRwczovL2tleXN0b3JlLm9wZW5iYW5raW5ndGVzdC5vcmcudWsvMDAxNTgwMDAwMVpFWjNXQUFYLzR0SENGWXpobVJUcDVlZDdUcjVJTjYuandrcyIsInNvZnR3YXJlX2p3a3NfcmV2b2tlZF9lbmRwb2ludCI6Imh0dHBzOi8va2V5c3RvcmUub3BlbmJhbmtpbmd0ZXN0Lm9yZy51ay8wMDE1ODAwMDAxWkVaM1dBQVgvcmV2b2tlZC80dEhDRll6aG1SVHA1ZWQ3VHI1SU42Lmp3a3MiLCJzb2Z0d2FyZV9wb2xpY3lfdXJpIjoiaHR0cHM6Ly9zeW50YXhhLmNvLnVrL3BvbGljeSIsInNvZnR3YXJlX3Rvc191cmkiOiJodHRwczovL3N5bnRheGEuY28udWsvdGVybXMtb2Ytc2VydmljZSIsInNvZnR3YXJlX29uX2JlaGFsZl9vZl9vcmciOiIifQ.C2VsgsuOPg3CmR3BYHDutJXN9VHmLjfnTTmq9ducX1ct97vkyef3259-DkQdDBrd82-dKFFM-V_PBTa9b0G04jN80FbBDQzCEASQZI7swpX-4hVsod7_Na9TKW_tZHx40NZTeifi1NaRLyUIIXYeK_4ouKE_iHLewKWY5xt9YzOCLiVPP_1fnedhQO4brxhbt6G9vHdx7UdfiUYPW02KwtY8VkvbDEFT9SqHHZmkSkqwcY7pUlaZWFHC816DYc6FYZH1EnWHqcDkI3EvYlMtzMdmdgyU9DJZciKt1VC9vwtyq2v_dELPeSaw2tNOphAW9ux5VFWa4FVIhinJxfuiIA";
 
-    public String createRegistration() {
+    private ProviderContext context;
+
+    @Override
+    public CreateRegistrationResponse createRegistration(CreateRegistrationRequest request) {
 
         CloseableHttpClient httpClient = ApiClientUtils.getHttpClient();
 
@@ -97,7 +85,9 @@ public class OZoneRegistrationVersion1_0 {
                 System.out.println(responseBody);
                 EntityUtils.consumeQuietly(entity);
 
-                return responseBody;
+                return CreateRegistrationResponse.builder()
+                        .clientId(responseBody) //TODO
+                        .build();
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -116,6 +106,21 @@ public class OZoneRegistrationVersion1_0 {
 
     }
 
+    @Override
+    public GetRegistrationResponse getRegistration(GetRegistrationRequest request) throws NotSupportedException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public UpdateRegistrationResponse updateRegistration(UpdateeRegistrationRequest request) throws NotSupportedException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public DeleteRegistrationResponse deleteRegistration(DeleteRegistrationRequest request) throws NotSupportedException {
+        throw new NotSupportedException();
+    }
+
     private String generateRegistrationRequest(final String softwareStatementId, final String softwareStatementAssertion) {
         Key signingKey = KeyUtils.getPrivateKey("certs/4tHCFYzhmRTp5ed7Tr5IN6_signing.jks", "password1", "nWNjoBVmFEhkEI-YPmgOXlTniTU", "password1");
 
@@ -125,9 +130,7 @@ public class OZoneRegistrationVersion1_0 {
     private JwtClaims generateRegistrationRequestClaimset(final String softwareStatementId, final String softwareStatementAssertion) {
 
         final JwtClaims claimset = new JwtClaims();
-        //TODO: set in past to deal with skew?
         NumericDate now = NumericDate.now();
-        now.addSeconds(-30);
         claimset.setIssuedAt(now);
         claimset.setJwtId(UUID.randomUUID().toString());
         claimset.setIssuer(softwareStatementId);
@@ -149,9 +152,5 @@ public class OZoneRegistrationVersion1_0 {
         claimset.setClaim("scope", "openid accounts payments");
 
         return claimset;
-    }
-
-    public static void main(String[] a) {
-        new OZoneRegistrationVersion1_0().createRegistration();
     }
 }
