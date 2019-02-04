@@ -1,0 +1,11 @@
+package uk.co.syntaxa.openbanking.api.model.api;
+
+import uk.co.syntaxa.openbanking.api.model.exception.NotSupportedException;
+
+public interface PispVersion3_0 {
+
+    void createConsent();
+    void getConsent() throws NotSupportedException;
+    void createPayment();
+    void getPayment() throws NotSupportedException;
+}
