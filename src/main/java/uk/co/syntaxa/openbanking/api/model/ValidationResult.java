@@ -3,6 +3,7 @@ package uk.co.syntaxa.openbanking.api.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,12 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class ValidationResult {
-    private boolean valid = true;
+
     private List<String> errors;
+
+    public boolean isValid() {
+        return CollectionUtils.isEmpty(this.errors);
+    }
 
     public ValidationResult addError(String error) {
         if (this.errors == null) {
@@ -20,7 +25,6 @@ public class ValidationResult {
         }
 
         this.errors.add(error);
-        this.valid = false;
 
         return this;
     }

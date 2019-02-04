@@ -1,8 +1,9 @@
-package uk.co.syntaxa.openbanking.api.model.response;
+package uk.co.syntaxa.openbanking.api.model.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.jose4j.jca.ProviderContext;
+import uk.co.syntaxa.openbanking.api.model.response.EndpointResponse;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 @EqualsAndHashCode
 @ToString
-public abstract class ApiResponse<R, T> {
+public abstract class ApiRequest<R, T> {
 
     private ProviderContext context;
     private R requestParamaters;
