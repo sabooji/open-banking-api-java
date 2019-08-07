@@ -25,6 +25,9 @@
         <jackson.version>2.9.8</jackson.version>
         <okhttp.version>3.12.1</okhttp.version>
         <apacheCommons.version>4.2</apacheCommons.version>
+        <junit.version>5.3.1</junit.version>
+        <restAssured.version>4.0.0</restAssured.version>
+        <jose4j.version>0.6.5</jose4j.version>
     </properties>
 
     <dependencyManagement>
@@ -59,7 +62,21 @@
                 <artifactId>commons-collections4</artifactId>
                 <version>${apacheCommons.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${restAssured.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>${jose4j.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -89,10 +106,19 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 </project>
